@@ -7,6 +7,7 @@ import {
   updateProductService,
 } from '../services/product.service';
 import { uploadImageToSupabase } from '../utils/uploadImage';
+import type { CreateProductInput } from '../validations/product.validation';
 
 export const getProduct = async (
   req: Request,
@@ -26,8 +27,13 @@ export const getProduct = async (
   }
 };
 
+interface AddProduct extends Request {
+  body: CreateProductInput;
+  file?: Express.Multer.File;
+}
+
 export const addProduct = async (
-  req: Request,
+  req: AddProduct,
   res: Response,
   next: NextFunction
 ) => {
@@ -77,15 +83,19 @@ export const deleteProduct = async (
   }
 };
 
+interface UpdateProductRequest extends AddProduct {
+  params: { id: string };
+}
+
 export const updateProduct = async (
-  req: Request,
+  req: UpdateProductRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
     const { name, description } = req.body;
     const file = req.file;
-    const id = req.params.id;
+    const { id } = req.params;
 
     const data = await updateProductService({ id, name, description, file });
 

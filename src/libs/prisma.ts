@@ -1,13 +1,13 @@
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from '../generated/prisma/client';
 
 const prismaClientSingleton = () => {
   return new PrismaClient({
     log:
-      process.env.NODE_ENV === "test"
+      process.env.NODE_ENV === 'test'
         ? []
-        : process.env.NODE_ENV === "development"
-          ? ["query", "info", "warn", "error"]
-          : ["error"],
+        : process.env.NODE_ENV === 'development'
+          ? ['query', 'info', 'warn', 'error']
+          : ['error'],
   });
 };
 
@@ -17,7 +17,7 @@ declare global {
 
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   globalThis.prismaGlobal = prisma;
 }
 

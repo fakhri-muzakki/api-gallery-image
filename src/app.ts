@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -33,7 +34,6 @@ app.use('/api/products', productRoutes);
 
 // Error handling middleware (harus di akhir)
 app.use(notFound);
-app.use('/uploads', express.static('uploads'));
 app.use(errorHandler);
 
 export default app;

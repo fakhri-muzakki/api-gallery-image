@@ -3,7 +3,7 @@ import prisma from '../src/libs/prisma';
 import { faker } from '@faker-js/faker';
 
 async function main() {
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 100; i++) {
     await prisma.product.create({
       data: {
         name: faker.person.fullName(),

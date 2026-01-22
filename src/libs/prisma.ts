@@ -1,34 +1,27 @@
 import { PrismaClient } from '../generated/prisma/client';
-import { neonConfig, type PoolConfig } from '@neondatabase/serverless';
+import { type PoolConfig } from '@neondatabase/serverless';
 import { PrismaNeon } from '@prisma/adapter-neon';
-import ws from 'ws';
-
-// Configure WebSocket for local development
-neonConfig.webSocketConstructor = ws;
 
 const prismaClientSingleton = () => {
-  // Get DATABASE_URL
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
     throw new Error('DATABASE_URL environment variable is required');
   }
 
-  // Create Neon PoolConfig
-  const poolConfig: PoolConfig = { connectionString: databaseUrl };
+  // Pool configuration untuk serverless
+  const pool: PoolConfig = {
+    connectionString: databaseUrl,
+    max: 1, // 1 connection per serverless instance
+    idleTimeoutMillis: 0, // Immediate cleanup
+    allowExitOnIdle: true, // PENTING: izinkan exit
+  };
 
-  // Create Prisma Neon Adapter
-  const adapter = new PrismaNeon(poolConfig);
+  const adapter = new PrismaNeon(pool);
 
-  // Return PrismaClient with adapter
   return new PrismaClient({
     adapter,
-    log:
-      process.env.NODE_ENV === 'test'
-        ? []
-        : process.env.NODE_ENV === 'development'
-          ? ['query', 'info', 'warn', 'error']
-          : ['error'],
+    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
 };
 

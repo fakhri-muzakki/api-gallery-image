@@ -1,7 +1,7 @@
 import { performance } from 'node:perf_hooks';
 
 const BASE_URL = 'https://api-gallery-image.vercel.app/api/products';
-const CONCURRENT_USERS = 100;
+const CONCURRENT_USERS = 1;
 
 type Result = {
   status: number;

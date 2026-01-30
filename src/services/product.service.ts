@@ -4,7 +4,7 @@ import { deleteImageFromSupabase } from '../utils/deleteImage';
 import { uploadImageToSupabase } from '../utils/uploadImage';
 
 export const getProductService = async () => {
-  return await prisma.product.findMany();
+  return await prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
 };
 
 interface AddProductPayload {
